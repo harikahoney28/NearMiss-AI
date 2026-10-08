@@ -3,6 +3,7 @@ import math
 import cv2
 import os
 import subprocess
+import shutil
 
 model = YOLO("yolo11n.pt")
 
@@ -511,11 +512,7 @@ def analyze_video(video_path):
         f"{video_name}_detected_h264.mp4"
     )
 
-    ffmpeg_path = (
-        r"C:\Users\BHARGAV\AppData\Local\Microsoft\WinGet\Packages"
-        r"\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe"
-        r"\ffmpeg-9.0.2-full_build\bin\ffmpeg.exe"
-    )
+    ffmpeg_path = shutil.which("ffmpeg")
 
     try:
         subprocess.run(

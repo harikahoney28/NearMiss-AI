@@ -11,6 +11,9 @@ import nearMiss2 from "./assets/nearmiss_split_images/near-miss-2.png";
 import nearMiss3 from "./assets/nearmiss_split_images/near-miss-3.png";
 import nearMiss4 from "./assets/nearmiss_split_images/near-miss-4.png";
 import nearMiss5 from "./assets/nearmiss_split_images/near-miss-5.png";
+
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:8000";
 type RiskLevel = "Critical" | "High" | "Medium" | "Low" | "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
 
 type EventItem = {
@@ -184,7 +187,7 @@ const runAIAnalysis = async () => {
         console.log("SENDING REQUEST TO BACKEND");
 
     const response = await fetch(
-      `http://127.0.0.1:8000/api/analyze?junction=${encodeURIComponent(
+      `${BACKEND_URL}/api/analyze?junction=${encodeURIComponent(
         backendJunction
       )}&camera=${encodeURIComponent(selectedCamera)}`
     );
@@ -216,7 +219,7 @@ const handleVideoUpload = (file: File) => {
 };
 
   useEffect(() => {
-  fetch("http://127.0.0.1:8000/api/status")
+  fetch(`${BACKEND_URL}/api/status`)
     .then((response) => response.json())
     .then((data) => {
       setBackendStatus(data.message);
@@ -228,7 +231,7 @@ const handleVideoUpload = (file: File) => {
 
 
 useEffect(() => {
-  fetch("http://127.0.0.1:8000/api/alerts")
+  fetch(`${BACKEND_URL}/api/alerts`)
     .then((response) => response.json())
     .then((data) => {
       console.log("ALERTS FROM BACKEND:", data.alerts);
@@ -324,7 +327,7 @@ useEffect(() => {
 }, [activePage]);
 
 useEffect(() => {
-  fetch("http://127.0.0.1:8000/api/events")
+  fetch(`${BACKEND_URL}/api/events`)
     .then((response) => response.json())
     .then((data) => {
       console.log("EVENTS FROM BACKEND:", data.events);
@@ -484,7 +487,7 @@ useEffect(() => {
               key={aiResult?.annotated_video || selectedVideo}
               src={
   aiResult?.annotated_video
-    ? `http://127.0.0.1:8000${aiResult.annotated_video}`
+    ? `${BACKEND_URL}${aiResult.annotated_video}`
     : selectedVideo
 }
               autoPlay
@@ -959,7 +962,7 @@ useEffect(() => {
                 setUploadProgress(25);
 
                 const response = await fetch(
-                  "http://127.0.0.1:8000/api/analyze-upload",
+                  `${BACKEND_URL}/api/analyze-upload`,
                   {
                     method: "POST",
                     body: formData,
@@ -2451,7 +2454,7 @@ if (activePage === "Settings") {
        <video
   src={
   aiResult?.annotated_video
-    ? `http://127.0.0.1:8000${aiResult.annotated_video}`
+    ? `${BACKEND_URL}${aiResult.annotated_video}`
     : selectedVideo
 }
   

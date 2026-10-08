@@ -4,20 +4,24 @@ import os
 from fastapi.staticfiles import StaticFiles
 from ai_detection import analyze_video
 from fastapi import FastAPI, Query, UploadFile, File
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+VIDEO_DIR = os.path.join(PROJECT_DIR, "frontend", "src", "assets")
+
 VIDEO_PATHS = {
     "Junction 1": {
-        "Camera 1": r"C:\Users\BHARGAV\OneDrive\Desktop\NearMiss-AI\frontend\src\assets\traffic-junction-a.mp4",
+        "Camera 1": os.path.join(VIDEO_DIR, "traffic-junction-a.mp4"),
     },
 
     "Junction 2": {
-        "Camera 1": r"C:\Users\BHARGAV\OneDrive\Desktop\NearMiss-AI\frontend\src\assets\traffic-junction-b.mp4",
+        "Camera 1": os.path.join(VIDEO_DIR, "traffic-junction-b.mp4"),
     },
 
     "Main Road": {
-        "Camera 1": r"C:\Users\BHARGAV\OneDrive\Desktop\NearMiss-AI\frontend\src\assets\traffic-main-road.mp4",
+        "Camera 1": os.path.join(VIDEO_DIR, "traffic-main-road.mp4"),
     },
 }
-IMAGE_DATASET_PATH = r"C:\Users\BHARGAV\Downloads\archive (1)\data\test\Accident"
+IMAGE_DATASET_PATH = os.path.join(BASE_DIR, "alert_images")
 app = FastAPI()
 ANNOTATED_VIDEO_DIR = os.path.join(os.path.dirname(__file__), "annotated_videos")
 os.makedirs(ANNOTATED_VIDEO_DIR, exist_ok=True)
@@ -29,18 +33,13 @@ app.mount(
     StaticFiles(directory=IMAGE_DATASET_PATH),
     name="alert-images"
 )
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/")
 def home():
