@@ -1,0 +1,7 @@
+__py
+cache__/
+*.pyc
+
+runs/
+uploads/
+annotated_videos/
